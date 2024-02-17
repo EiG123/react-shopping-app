@@ -1,9 +1,11 @@
+import Cart from "./components/Cart.js";
 import Header from "./components/Header.js";
 
 function App() {
   return (
     <div className="App">
-      <Header></Header>
+      <Header/>
+      <Cart/>
     </div>
   );
 }
