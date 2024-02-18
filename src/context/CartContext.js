@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useReducer, useEffect } from "react";
 import products from "../data/products";
 import cartReducer from "../reducer/cartReducer";
 const CartContext = createContext()
@@ -10,8 +10,25 @@ const initState={
 
 export const CartProvider=({children})=>{
     const [state, dispatch] = useReducer(cartReducer, initState)
+    function formatMoney(money){//แปลงตัวเลขให้มี ,
+        return money.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    }
+
+    //ลบสินค้า
+    function removeItem(id){
+        dispatch({type:"REMOVE",payload:id})
+    }
+
+    //เพิ่มสินค้า
+    function addQuantity(id){
+        dispatch({type:"ADD", payload:id})
+    }
+
+    useEffect(()=>{
+        dispatch({type:"CALCULATE_TOTAL"})
+    },[state.products]);
     return(
-        <CartContext.Provider value={{...state}}>
+        <CartContext.Provider value={{...state, formatMoney, removeItem, addQuantity}}>
             {children}
         </CartContext.Provider>
     );
