@@ -28,20 +28,38 @@ const cartReducer = (state, action) => {
     };
   }
 
-  if (action.type === "ADD"){
-    let updateProducts = state.products.map((item)=>{
-        if(item.id === action.payload){
-            return{
-                ...item,
-                quantity:item.quantity+1
-            }
+  if (action.type === "ADD") {
+    let updateProducts = state.products.map((item) => {
+      if (item.id === action.payload) {
+        return {
+          ...item,
+          quantity: item.quantity + 1,
+        };
+      }
+      return item;
+    });
+    return {
+      ...state,
+      products: updateProducts,
+    };
+  }
+
+  if (action.type === "SUBTRACT") {
+    let updateProducts = state.products
+      .map((item) => {
+        if (item.id === action.payload) {
+          return {
+            ...item,
+            quantity: item.quantity - 1,
+          };
         }
         return item;
-    })
-    return{
-        ...state,
-        products:updateProducts
-    }
+      })
+      .filter((item) => item.quantity !== 0);
+    return {
+      ...state,
+      products: updateProducts,
+    };
   }
 };
 
